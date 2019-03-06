@@ -1,5 +1,7 @@
 # golang_endpoint_assignment
 
+To save some time I did not include a DB
+
 ## Needed before starting server
 -router
  go get github.com/gorilla/mux 
@@ -45,3 +47,7 @@ localhost:1337/download
 ##Import
 -will grab a csv file by the name "ImportAddressBook.csv"
 -this is located in the same folder as main.go
+
+##Testing
+go test
+-will run through tests in main_test.go

@@ -3,13 +3,13 @@ package main
 import (
 	"github.com/gorilla/mux"
 	"encoding/json"
-	// "fmt"
 	"log"
 	"net/http"
 	"encoding/csv"
 	"os"
 	"strconv"
 	"strings"
+	// "fmt"
 
 )
 
@@ -24,7 +24,9 @@ type Customer struct {
 
 var customers []Customer
 
+// GetPersonEndpoint get single person
 func GetPersonEndpoint(w http.ResponseWriter, req *http.Request) {
+	w.WriteHeader(200)
 	params := mux.Vars(req)
 	for _, item := range customers {
 		if item.ID == params["id"] {
@@ -35,11 +37,15 @@ func GetPersonEndpoint(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(&Customer{})
 }
 
+// GetPeopleEndpoint get all people
 func GetPeopleEndpoint(w http.ResponseWriter, req *http.Request) {
+	w.WriteHeader(200)
 	json.NewEncoder(w).Encode(customers)
 }
 
+// DeletePersonEndpoint delete single person
 func DeletePersonEndpoint(w http.ResponseWriter, req *http.Request) {
+	w.WriteHeader(200)
 	params := mux.Vars(req)
 	for i, item := range customers {
 		if item.ID == params["id"] {
@@ -50,7 +56,9 @@ func DeletePersonEndpoint(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(customers)
 }
 
+// CreatePersonEndpoint creates a single person
 func CreatePersonEndpoint(w http.ResponseWriter, req *http.Request) {
+	w.WriteHeader(200)
 	var customer Customer
 	lastIdx := len(customers) - 1
 	lastCustomer := customers[lastIdx]
@@ -64,7 +72,9 @@ func CreatePersonEndpoint(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(customer)
 }
 
+// EditPersonEndpoint edit an already existing person
 func EditPersonEndpoint(w http.ResponseWriter, req *http.Request) {
+	w.WriteHeader(200)
 	params := mux.Vars(req)
 	var customer Customer
 	for i, item := range customers {
@@ -78,7 +88,9 @@ func EditPersonEndpoint(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(customer)
 }
 
+// DownloadAddressBook export a csv file to project folder
 func DownloadAddressBook(w http.ResponseWriter, req *http.Request) {
+	w.WriteHeader(200)
 	rows := GetRowsFromCustomersJson()
 	f, err := os.Create("ExportAddressBook.csv")
 	if err != nil {
@@ -96,7 +108,8 @@ func DownloadAddressBook(w http.ResponseWriter, req *http.Request) {
 	err = d.WriteAll(rows)
 }
 
-func GetRowsFromCustomersJson() ([][]string) {
+//GetRowsFromCustomersJson reads the slice of current customers and placing into a [][]string
+func GetRowsFromCustomersJson() [][]string {
 	var rows [][]string
 	for i, item := range customers {
 		var row []string
@@ -118,7 +131,9 @@ func GetRowsFromCustomersJson() ([][]string) {
 	return rows
 }
 
+// ImportAddressBook import values from csv file in project folder
 func ImportAddressBook(w http.ResponseWriter, req *http.Request) {
+	w.WriteHeader(200)
 	rows := readCSV("ImportAddressBook.csv")
 	var customer Customer
 	for _, row := range rows {
@@ -135,6 +150,7 @@ func ImportAddressBook(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(customers)
 }
 
+// readCSV reads the file needing to be imported
 func readCSV(name string) [][]string {
 	f, err := os.Open(name)
 	if err != nil {

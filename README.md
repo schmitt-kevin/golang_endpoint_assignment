@@ -46,10 +46,10 @@ To save some time I did not include a DB
 
 ### -will download to same folder you run main.go from
 
-##Import
+## Import
 ### -will grab a csv file by the name "ImportAddressBook.csv"
 ### -this is located in the same folder as main.go
 
-##Testing
+## Testing
 ### go test
 ### -will run through tests in main_test.go
